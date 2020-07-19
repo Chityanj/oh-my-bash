@@ -2,7 +2,6 @@
 
 # minikube (Kubernetes CLI) completion
 
-if command -v minikube &>/dev/null
-then
+if command -v minikube &>/dev/null; then
   eval "$(minikube completion bash)"
 fi

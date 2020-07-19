@@ -32,23 +32,23 @@ export VIRTUALENV_THEME_PROMPT_PREFIX='('
 export VIRTUALENV_THEME_PROMPT_SUFFIX=') '
 
 function prompt_command() {
-    # This needs to be first to save last command return code
-    local RC="$?"
+  # This needs to be first to save last command return code
+  local RC="$?"
 
-    hostname="$bold_black\u"
-    virtualenv="$white$(virtualenv_prompt)"
+  hostname="$bold_black\u"
+  virtualenv="$white$(virtualenv_prompt)"
 
-    # Set return status color
-    if [[ ${RC} == 0 ]]; then
-        ret_status="$bold_green"
-    else
-        ret_status="$bold_red"
-    fi
+  # Set return status color
+  if [[ ${RC} == 0 ]]; then
+    ret_status="$bold_green"
+  else
+    ret_status="$bold_red"
+  fi
 
-    # Append new history lines to history file
-    history -a
+  # Append new history lines to history file
+  history -a
 
-    PS1="$virtualenv$hostname $bold_cyan\w $(scm_prompt_char_info)$ret_status→ $normal"
+  PS1="$virtualenv$hostname $bold_cyan\w $(scm_prompt_char_info)$ret_status→ $normal"
 }
 
 safe_append_prompt_command prompt_command

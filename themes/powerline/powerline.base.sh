@@ -3,7 +3,7 @@
 # Define this here so it can be used by all of the Powerline themes
 THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
 
-function set_color {
+function set_color() {
   if [[ "${1}" != "-" ]]; then
     fg="38;5;${1}"
   fi
@@ -14,7 +14,7 @@ function set_color {
   echo -e "\[\033[$fg${bg}m\]"
 }
 
-function __powerline_user_info_prompt {
+function __powerline_user_info_prompt() {
   local user_info=""
   local color="$USER_INFO_THEME_PROMPT_COLOR"
 
@@ -40,7 +40,7 @@ function __powerline_user_info_prompt {
   [[ -n "${user_info}" ]] && echo "$user_info|$color"
 }
 
-function __powerline_ruby_prompt {
+function __powerline_ruby_prompt() {
   local ruby_version=""
 
   if type_exists 'rvm'; then
@@ -52,7 +52,7 @@ function __powerline_ruby_prompt {
   [[ -n "${ruby_version}" ]] && echo "$RUBY_CHAR$ruby_version|$RUBY_THEME_PROMPT_COLOR"
 }
 
-function __powerline_python_venv_prompt {
+function __powerline_python_venv_prompt() {
   local python_venv=""
 
   if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
@@ -65,7 +65,7 @@ function __powerline_python_venv_prompt {
   [[ -n "${python_venv}" ]] && echo "$PYTHON_VENV_CHAR$python_venv|$PYTHON_VENV_THEME_PROMPT_COLOR"
 }
 
-function __powerline_scm_prompt {
+function __powerline_scm_prompt() {
   local color=""
   local scm_prompt=""
 
@@ -88,17 +88,17 @@ function __powerline_scm_prompt {
   fi
 }
 
-function __powerline_cwd_prompt {
+function __powerline_cwd_prompt() {
   echo "$(pwd | sed "s|^$HOME|~|")|$CWD_THEME_PROMPT_COLOR"
 }
 
-function __powerline_clock_prompt {
+function __powerline_clock_prompt() {
   echo "$(date +"$THEME_CLOCK_FORMAT")|$CLOCK_THEME_PROMPT_COLOR"
 }
 
-function __powerline_battery_prompt {
+function __powerline_battery_prompt() {
   local color=""
-  local battery_status="$(battery_percentage 2> /dev/null)"
+  local battery_status="$(battery_percentage 2>/dev/null)"
 
   if [[ -z "${battery_status}" ]] || [[ "${battery_status}" = "-1" ]] || [[ "${battery_status}" = "no" ]]; then
     true
@@ -115,15 +115,16 @@ function __powerline_battery_prompt {
   fi
 }
 
-function __powerline_in_vim_prompt {
+function __powerline_in_vim_prompt() {
   if [ -n "$VIMRUNTIME" ]; then
     echo "$IN_VIM_THEME_PROMPT_TEXT|$IN_VIM_THEME_PROMPT_COLOR"
   fi
 }
 
-function __powerline_left_segment {
-  local OLD_IFS="$IFS"; IFS="|"
-  local params=( "$1" )
+function __powerline_left_segment() {
+  local OLD_IFS="$IFS"
+  IFS="|"
+  local params=("$1")
   IFS="$OLD_IFS"
   local separator_char="$POWERLINE_LEFT_SEPARATOR"
   local separator=""
@@ -133,14 +134,14 @@ function __powerline_left_segment {
   fi
   LEFT_PROMPT+="$separator$(set_color - "${params[1]}") ${params[0]} $normal"
   LAST_SEGMENT_COLOR=${params[1]}
-  (( SEGMENTS_AT_LEFT += 1 ))
+  ((SEGMENTS_AT_LEFT += 1))
 }
 
-function __powerline_last_status_prompt {
+function __powerline_last_status_prompt() {
   [[ "$1" -ne 0 ]] && echo "${1}|$LAST_STATUS_THEME_PROMPT_COLOR"
 }
 
-function __powerline_prompt_command {
+function __powerline_prompt_command() {
   local last_status="$?" ## always the first
   local separator_char="$POWERLINE_PROMPT_CHAR"
 
@@ -151,7 +152,7 @@ function __powerline_prompt_command {
   # The IFS (internal field seperator) may have been changed outside to not contain
   # the space character ' ' whence we need to make sure that the space separated list
   # stored in POWERLINE_PROMPT is converted into an array correctly.
-  IFS=' ' read -r -a POWERLINE_PROMPT_ARRAY <<< "$POWERLINE_PROMPT"
+  IFS=' ' read -r -a POWERLINE_PROMPT_ARRAY <<<"$POWERLINE_PROMPT"
 
   ## left prompt ##
   for segment in "${POWERLINE_PROMPT_ARRAY[@]}"; do
@@ -165,6 +166,6 @@ function __powerline_prompt_command {
 
   ## cleanup ##
   unset LAST_SEGMENT_COLOR \
-        LEFT_PROMPT \
-        SEGMENTS_AT_LEFT
+    LEFT_PROMPT \
+    SEGMENTS_AT_LEFT
 }
